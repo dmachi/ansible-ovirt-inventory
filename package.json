@@ -1,0 +1,19 @@
+{
+  "name": "ansible-ovirt-inventory",
+  "version": "0.0.5",
+  "description": "Ovirt External Inventory Script for Ansible",
+  "main": "index.js",
+  "bin": {
+       "ovirt-inventory": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dustin Machi <dmachi@dojotoolkit.org>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+        "promised-io": "*",
+	"request": "*",
+        "optimist": "*"
+  }
+}

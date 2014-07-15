@@ -37,11 +37,12 @@ function getVMs(query) {
 		strictSSL: false,
 		json: true
 	}, function(err,response,body){
+    //            console.log("Body: ", body);
 		if (err) {
 			console.log("Err: ", err);
 			return;
 		}
-		def.resolve(body.vms);
+		def.resolve(body.vm);
 	});	
 	
 	return def.promise;
@@ -49,7 +50,7 @@ function getVMs(query) {
 
 function getNICs(vm){
 	var def= new defer();
-	var nicsMeta = vm.links.filter(function(link){
+	var nicsMeta = vm.link.filter(function(link){
 		return link.rel=="nics";
 	})[0]
 
@@ -86,7 +87,7 @@ function getNICs(vm){
 
 function getVMTags(vm){
 	var def= new defer();
-	var tagsMeta = vm.links.filter(function(link){
+	var tagsMeta = vm.link.filter(function(link){
 		return link.rel=="tags";
 	})[0]
 
@@ -101,7 +102,7 @@ function getVMTags(vm){
                 strictSSL: false,
                 json: true
         }, function(err,response,rtags){
-		rtags = rtags.tags;
+		rtags = rtags.tag;
                 if (err) {
                         console.log("Err: ", err);
                         return;
@@ -229,17 +230,25 @@ function listGroups(inventory){
 if (argv.list) {
 	when(getVMs(""), function(vms){
 		var tagDefs=[];
-		vms.forEach(function(vm){
-			tagDefs.push(when(getVMTags(vm), function(tags){
-				vm.tags = tags;	
-			}));
-		});
-
-		return when(All(tagDefs), function(){
-			vms.forEach(addVMToInventoryGroup)
-		
-			listGroups(inventory);
-		});
+		if (vms && vms.forEach) {
+			vms.forEach(function(vm){
+				tagDefs.push(when(getVMTags(vm), function(tags){
+					vm.tags = tags;	
+				}));
+			});
+	
+			return when(All(tagDefs), function(){
+				vms.forEach(addVMToInventoryGroup)
+			
+				listGroups(inventory);
+			});
+		}else{
+			console.log("No VMs: ", vms);
+			throw Error("no vms");	
+		}
+	}, function(err){
+		console.log("err retrieving vms: ", err);
+		return err;
 	});
 }
 

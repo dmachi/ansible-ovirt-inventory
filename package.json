@@ -1,6 +1,6 @@
 {
   "name": "ansible-ovirt-inventory",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Ovirt External Inventory Script for Ansible",
   "main": "index.js",
   "bin": {

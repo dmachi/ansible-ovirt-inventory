@@ -297,11 +297,15 @@ if (argv.isUpAndReady) {
 			process.exit(1);
                 }else{
 			var vm = vms[0]
-			if (vm.status && vm.status.state && vm.status.state=="up" && vm.guestInfo){
-				console.log("VM State: ", vm.status.state, vm.guestInfo);
+			if (vm.status && vm.status.state && vm.status.state=="up" && vm.guest_info){
+				console.log("VM State: ", vm.status.state, vm.guest_info);
 				process.exit(0);
 			}else{
-				console.log("VM is not ready or does not yet have guest agent infon",JSON.stringify(vm));
+				console.log("VM is not ready or does not yet have guest agent info.");
+				console.log("VM Status: ",JSON.stringify(vm.status));
+				console.log("VM Guest Info: ",JSON.stringify(vm.guest_info));
+
+				console.log("\nVM: ",JSON.stringify(vm,null,4));
 				process.exit(1);
 			}
 		}
